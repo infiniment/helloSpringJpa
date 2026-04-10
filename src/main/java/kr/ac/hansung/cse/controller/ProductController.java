@@ -51,9 +51,21 @@ public class ProductController {
     // ─────────────────────────────────────────────────────────────────
 
     @GetMapping
-    public String listProducts(Model model) {
-        List<Product> products = productService.getAllProducts();
+    public String listProducts(
+            @RequestParam(required = false) String keyword,   // GET ?keyword=노트북
+            @RequestParam(required = false) Long categoryId,  // GET ?categoryId=1
+            Model model) {
+        List<Product> products;
+        if (keyword != null && !keyword.isBlank()) {
+            products = productService.searchByName(keyword);
+        } else if (categoryId != null) {
+            products = productService.searchByCategory(categoryId);
+        } else { products = productService.getAllProducts(); }
         model.addAttribute("products", products);
+        // 카테고리 드롭다운 목록 + 현재 검색 조건 유지
+        model.addAttribute("categories", categoryService.getAllCategories());
+        model.addAttribute("keyword", keyword);
+        model.addAttribute("categoryId", categoryId);
         return "productList";
     }
 
@@ -243,23 +255,6 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping
-    public String listProducts(
-            @RequestParam(required = false) String keyword,   // GET ?keyword=노트북
-            @RequestParam(required = false) Long categoryId,  // GET ?categoryId=1
-            Model model) {
-        List<Product> products;
-        if (keyword != null && !keyword.isBlank()) {
-            products = productService.searchByName(keyword);
-        } else if (categoryId != null) {
-            products = productService.searchByCategory(categoryId);
-        } else { products = productService.getAllProducts(); }
-        model.addAttribute("products", products);
-        // 카테고리 드롭다운 목록 + 현재 검색 조건 유지
-        model.addAttribute("categories", categoryService.getAllCategories());
-        model.addAttribute("keyword", keyword);
-        model.addAttribute("categoryId", categoryId);
-        return "productList";
-    }
+
 
 }
