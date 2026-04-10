@@ -22,4 +22,11 @@ public class CategoryController {
         return "categoryList";
     }
 
+    // 등록 폼 표시
+    @GetMapping("/create")
+    public String showCreateForm(Model model) {
+        model.addAttribute("categoryForm", new CategoryForm());
+        return "categoryForm";
+    }
+
 }
