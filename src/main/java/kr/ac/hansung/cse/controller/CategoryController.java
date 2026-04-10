@@ -1,5 +1,6 @@
 package kr.ac.hansung.cse.controller;
 
+import kr.ac.hansung.cse.model.CategoryForm;
 import org.springframework.ui.Model;
 import kr.ac.hansung.cse.service.CategoryService;
 import org.springframework.stereotype.Controller;
@@ -17,7 +18,7 @@ public class CategoryController {
 
     // 카테고리 목록 조회
     @GetMapping
-    public String showCreateForm(Model model) {
+    public String listCategories(Model model) {
         model.addAttribute("categories", categoryService.getAllCategories());
         return "categoryList";
     }
